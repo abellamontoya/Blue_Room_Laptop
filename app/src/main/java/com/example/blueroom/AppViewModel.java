@@ -16,7 +16,7 @@ public class AppViewModel extends AndroidViewModel {
             this.tipo = tipo;
         }
     }
-    public MutableLiveData<Product> postSeleccionado = new
+    public MutableLiveData<products> postSeleccionado = new
             MutableLiveData<>();
     public MutableLiveData<Media> mediaSeleccionado = new
             MutableLiveData<>();

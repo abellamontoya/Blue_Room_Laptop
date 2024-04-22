@@ -16,12 +16,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -31,7 +34,7 @@ public class HomeFragment extends Fragment {
     private NavController navController;
     private AppViewModel appViewModel;
     private ImageView photoImageView;
-    private FirestoreRecyclerAdapter<Product, ProductViewHolder> adapter;
+    private FirestoreRecyclerAdapter<products, ProductViewHolder> adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -43,6 +46,17 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(view);
 
+        FloatingActionButton miau = view.findViewById(R.id.miau);
+
+        miau.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navController.navigate(R.id.addProductFragment);
+            }
+        });
+
+
+
         appViewModel = new ViewModelProvider(requireActivity()).get(AppViewModel.class);
 
         // Initialize RecyclerView with GridLayoutManager
@@ -52,13 +66,13 @@ public class HomeFragment extends Fragment {
         // Set up Firestore query
         Query query = FirebaseFirestore.getInstance().collection("products").orderBy("Name");
 
-        FirestoreRecyclerOptions<Product> options = new FirestoreRecyclerOptions.Builder<Product>()
-                .setQuery(query, Product.class)
+        FirestoreRecyclerOptions<products> options = new FirestoreRecyclerOptions.Builder<products>()
+                .setQuery(query, products.class)
                 .setLifecycleOwner(this)
                 .build();
 
         Log.d("QUERY_DEBUG", query.get().toString());
-        adapter = new FirestoreRecyclerAdapter<Product, ProductViewHolder>(options) {
+        adapter = new FirestoreRecyclerAdapter<products, ProductViewHolder>(options) {
             @NonNull
             @Override
             public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -67,7 +81,7 @@ public class HomeFragment extends Fragment {
             }
 
             @Override
-            protected void onBindViewHolder(@NonNull ProductViewHolder holder, int position, @NonNull Product model) {
+            protected void onBindViewHolder(@NonNull ProductViewHolder holder, int position, @NonNull products model) {
                 Log.d("BIND_DEBUG", "Binding item: " + model.getName()); // Registro para depuración
                 holder.bind(model);
             }
@@ -107,27 +121,27 @@ public class HomeFragment extends Fragment {
     }
 
     static class ProductViewHolder extends RecyclerView.ViewHolder {
-        ImageView productImageView;
-        TextView nameTextView;
-        TextView authorTextView;
-        TextView priceTextView;
-        TextView quantityTextView;
+        ImageView imageurl;
+        TextView name;
+        TextView author;
+        TextView price;
+        TextView quantity;
 
         public ProductViewHolder(@NonNull View itemView) {
             super(itemView);
-            productImageView = itemView.findViewById(R.id.ImageURL);
-            nameTextView = itemView.findViewById(R.id.Name);
-            authorTextView = itemView.findViewById(R.id.Author);
-            priceTextView = itemView.findViewById(R.id.Price);
-            quantityTextView = itemView.findViewById(R.id.Quantity);
+            imageurl = itemView.findViewById(R.id.imageurl);
+            name = itemView.findViewById(R.id.name);
+            author = itemView.findViewById(R.id.author);
+            price = itemView.findViewById(R.id.price);
+            quantity = itemView.findViewById(R.id.quantity);
         }
 
-        public void bind(Product product) {
-            Glide.with(itemView.getContext()).load(product.getImageURL()).into(productImageView);
-            nameTextView.setText(product.getName());
-            authorTextView.setText(product.getAuthor());
-            priceTextView.setText(String.valueOf(product.getPrice()));
-            quantityTextView.setText(String.valueOf(product.getQuantity()));
+        public void bind(products product) {
+            Glide.with(itemView.getContext()).load(product.getImageURL()).into(imageurl);
+            name.setText(product.getName());
+            author.setText(product.getAuthor());
+            price.setText(String.valueOf(product.getPrice()));
+            quantity.setText(String.valueOf(product.getQuantity()));
         }
     }
 }

@@ -1,28 +1,28 @@
 package com.example.blueroom;
 
-public class Product {
-    public String author;  // Cambiado a minúscula
-    public String imageURL;
-    public String name;    // Cambiado a minúscula
-    public int quantity;   // Cambiado a minúscula
-    public int price;      // Cambiado a minúscula
-    public String date;
+public class products {
+    public String author;
+    public String imageUrl;
+    public String name;
+    public float quantity;
+    public float price;
+    public int date;
     public String type;
     public String[] tag;
 
-    public Product() {}
+    public products() {}
 
-    public Product(String imageURL, String name, String author, int price, int quantity) {
-        this.imageURL = imageURL;
+    public products(String imageurl, String name, String author, float price, float quantity) {
+        this.imageUrl = imageurl;
         this.name = name;
         this.author = author;
         this.price = price;
         this.quantity = quantity;
     }
 
-    public Product(String author, String imageURL, String name, int quantity, int price, String date, String type, String[] tag) {
+    public products(String author, String imageURL, String name, float quantity, float price, int date, String type, String[] tag) {
         this.author = author;
-        this.imageURL = imageURL;
+        this.imageUrl = imageUrl;
         this.name = name;
         this.quantity = quantity;
         this.price = price;
@@ -36,22 +36,22 @@ public class Product {
     }
 
     public void setImageURL(String imageURL) {
-        this.imageURL = imageURL;
+        this.imageUrl = imageURL;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(float quantity) {
         this.quantity = quantity;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(float price) {
         this.price = price;
     }
 
-    public void setDate(String date) {
+    public void setDate(int date) {
         this.date = date;
     }
 
@@ -68,18 +68,18 @@ public class Product {
     }
 
     public String getImageURL() {
-        return imageURL;
+        return imageUrl;
     }
 
     public String getName() {
         return name;
     }
 
-    public int getQuantity() {
+    public float getQuantity() {
         return quantity;
     }
 
-    public int getPrice() {
+    public float getPrice() {
         return price;
     }
 }
