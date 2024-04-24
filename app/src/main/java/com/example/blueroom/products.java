@@ -1,28 +1,30 @@
 package com.example.blueroom;
 
+import java.util.List;
+
 public class products {
     public String author;
-    public String imageUrl;
+    public String imageurl;
     public String name;
     public float quantity;
     public float price;
-    public int date;
+    public long date;
     public String type;
-    public String[] tag;
+    public List<String> tag;  // Cambia este campo a List<String>
 
     public products() {}
 
-    public products(String imageurl, String name, String author, float price, float quantity) {
-        this.imageUrl = imageurl;
+    public products(String imageUrl, String name, String author, float price, float quantity) {
+        this.imageurl = imageUrl;
         this.name = name;
         this.author = author;
         this.price = price;
         this.quantity = quantity;
     }
 
-    public products(String author, String imageURL, String name, float quantity, float price, int date, String type, String[] tag) {
+    public products(String author, String imageURL, String name, float quantity, float price, long date, String type, List<String> tag) {
         this.author = author;
-        this.imageUrl = imageUrl;
+        this.imageurl = imageURL;
         this.name = name;
         this.quantity = quantity;
         this.price = price;
@@ -35,8 +37,8 @@ public class products {
         this.author = author;
     }
 
-    public void setImageURL(String imageURL) {
-        this.imageUrl = imageURL;
+    public void setImageurl(String imageurl) {  // Cambiado a setImageurl
+        this.imageurl = imageurl;
     }
 
     public void setName(String name) {
@@ -51,7 +53,7 @@ public class products {
         this.price = price;
     }
 
-    public void setDate(int date) {
+    public void setDate(long date) {
         this.date = date;
     }
 
@@ -59,7 +61,7 @@ public class products {
         this.type = type;
     }
 
-    public void setTag(String[] tag) {
+    public void setTag(List<String> tag) {
         this.tag = tag;
     }
 
@@ -67,8 +69,8 @@ public class products {
         return author;
     }
 
-    public String getImageURL() {
-        return imageUrl;
+    public String getImageurl() {  // Cambiado a getImageurl
+        return imageurl;
     }
 
     public String getName() {

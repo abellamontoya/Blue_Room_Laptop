@@ -47,7 +47,16 @@
         android:text="haii^^"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toTopOf="@id/miau">
     </Button>
+
+    <TextView
+        android:id="@+id/miau"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="70dp">
+    </TextView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

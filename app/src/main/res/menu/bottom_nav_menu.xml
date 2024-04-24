@@ -6,7 +6,7 @@
         android:iconTint="@color/black"/>
 
     <item
-        android:id="@+id/signInFragment"
+        android:id="@+id/cartFragment"
         android:title="Cart"
         android:icon="@drawable/baseline_shopping_cart_24"
         android:iconTint="@color/black"/>

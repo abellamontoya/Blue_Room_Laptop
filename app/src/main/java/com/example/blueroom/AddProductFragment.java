@@ -51,7 +51,7 @@ public class AddProductFragment extends Fragment {
                 String name = productNameEditText.getText().toString();
                 String author = productAuthorEditText.getText().toString();
                 float price = Float.parseFloat(productPriceEditText.getText().toString());
-                float quantity = Float.parseFloat(productQuantityEditText.getText().toString());
+                int quantity = (int) Float.parseFloat(productQuantityEditText.getText().toString());
 
                 // Create a new product object
                 products newProduct = new products("", name, author, price, quantity); // Assuming imageURL is empty

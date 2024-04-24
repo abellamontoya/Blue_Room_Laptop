@@ -45,9 +45,4 @@
         android:label="Add Product"
         tools:layout="@layout/fragment_add_product" />
 
-    <!-- Navigation action from HomeFragment to AddProductFragment -->
-    <action
-        android:id="@+id/action_homeFragment_to_addProductFragment"
-        app:destination="@id/addProductFragment" />
-
 </navigation>

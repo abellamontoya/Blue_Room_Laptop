@@ -1,14 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
     tools:context=".profileFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+    <!-- Nombre del usuario -->
     <TextView
+        android:id="@+id/textViewName"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:text="Nombre del Usuario"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp"/>
 
-</FrameLayout>
+    <!-- Dirección del usuario -->
+    <TextView
+        android:id="@+id/textViewAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Dirección del Usuario"
+        android:textSize="16sp"
+        android:layout_marginBottom="8dp"/>
+
+    <!-- Ciudad del usuario -->
+    <TextView
+        android:id="@+id/textViewCity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ciudad del Usuario"
+        android:textSize="16sp"
+        android:layout_marginBottom="8dp"/>
+
+    <!-- Código postal del usuario -->
+    <TextView
+        android:id="@+id/textViewPostalCode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Código Postal del Usuario"
+        android:textSize="16sp"
+        android:layout_marginBottom="8dp"/>
+
+    <!-- País del usuario -->
+    <TextView
+        android:id="@+id/textViewCountry"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="País del Usuario"
+        android:textSize="16sp"/>
+
+</LinearLayout>

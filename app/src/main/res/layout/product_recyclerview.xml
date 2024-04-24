@@ -2,7 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="200dp"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp">
 
 
 
@@ -19,8 +20,9 @@
 
         <ImageButton
             android:id="@+id/imageurl"
-            android:layout_width="match_parent"
-            android:layout_height="170dp"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:layout_gravity="center"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -34,7 +36,9 @@
             android:textSize="18sp"
             android:textColor="@color/black"
             android:layout_marginBottom="8dp"
-            android:text="Product Name" />
+            android:text="Product Name"
+            android:maxLines="1"
+            android:ellipsize="end" />
 
         <TextView
             android:id="@+id/author"
@@ -42,23 +46,28 @@
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:textColor="@color/black"
-            android:text="Author" />
+            android:text="Author"
+            android:maxLines="1"
+            android:ellipsize="end" />
 
-        <TextView
-            android:id="@+id/price"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Price"
-            android:textColor="@color/black"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/quantity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textColor="@color/black"
-            android:text="Quantity" />
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Price"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="€"
+                android:textColor="@color/black">
+            </TextView>
+        </LinearLayout>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

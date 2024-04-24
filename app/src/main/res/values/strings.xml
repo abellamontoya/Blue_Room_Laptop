@@ -6,6 +6,12 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+    <string-array name="sort_options">
+        <item>Price Up</item>
+        <item>Price Down</item>
+        <item>Author</item>
+        <item>Default</item>
+    </string-array>
 
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>

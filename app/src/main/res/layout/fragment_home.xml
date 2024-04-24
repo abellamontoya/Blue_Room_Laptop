@@ -54,6 +54,7 @@
             android:orientation="horizontal"
             android:background="@color/less_clear_blue">
                 <Spinner
+                    android:id="@+id/spinner"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
                 </Spinner>
@@ -70,15 +71,15 @@
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:spanCount="2"
         app:layout_constraintTop_toBottomOf="@id/vert"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="@id/miau"/>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <TextView
         android:id="@+id/miau"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="80dp">
-    </com.google.android.material.floatingactionbutton.FloatingActionButton>
+        android:layout_marginBottom="70dp">
+    </TextView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

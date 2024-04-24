@@ -1,5 +1,6 @@
 package com.example.blueroom;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 
@@ -9,14 +10,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.fragment.NavHostFragment;
-import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import com.example.blueroom.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 
-    private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +24,9 @@ public class MainActivity extends AppCompatActivity {
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        // Inicializar SharedPreferences
+        sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
 
         NavController navController = ((NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.mobile_navigation)).getNavController();
 
@@ -41,5 +44,17 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        // Verificar si el usuario ha iniciado sesión
+        if (isLoggedIn()) {
+            // Navegar al fragmento de inicio (home)
+            navController.navigate(R.id.homeFragment);
+        }
+    }
+
+    // Método para verificar si el usuario ha iniciado sesión
+    private boolean isLoggedIn() {
+        // Verificar si "isLoggedIn" es true en SharedPreferences
+        return sharedPreferences.getBoolean("isLoggedIn", false);
     }
 }

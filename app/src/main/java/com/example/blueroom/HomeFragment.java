@@ -16,9 +16,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -46,17 +49,6 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(view);
 
-        FloatingActionButton miau = view.findViewById(R.id.miau);
-
-        miau.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navController.navigate(R.id.addProductFragment);
-            }
-        });
-
-
-
         appViewModel = new ViewModelProvider(requireActivity()).get(AppViewModel.class);
 
         // Initialize RecyclerView with GridLayoutManager
@@ -64,7 +56,7 @@ public class HomeFragment extends Fragment {
         recyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 2)); // 2 columns for grid
 
         // Set up Firestore query
-        Query query = FirebaseFirestore.getInstance().collection("products").orderBy("Name");
+        Query query = FirebaseFirestore.getInstance().collection("products").orderBy("name");
 
         FirestoreRecyclerOptions<products> options = new FirestoreRecyclerOptions.Builder<products>()
                 .setQuery(query, products.class)
@@ -72,6 +64,43 @@ public class HomeFragment extends Fragment {
                 .build();
 
         Log.d("QUERY_DEBUG", query.get().toString());
+        Spinner spinner = view.findViewById(R.id.spinner);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Query newQuery;
+                switch (position) {
+                    case 0: // Price Up
+                        newQuery = FirebaseFirestore.getInstance().collection("products").orderBy("price", Query.Direction.ASCENDING);
+                        break;
+                    case 1: // Price Down
+                        newQuery = FirebaseFirestore.getInstance().collection("products").orderBy("price", Query.Direction.DESCENDING);
+                        break;
+                    case 2: // Author
+                        newQuery = FirebaseFirestore.getInstance().collection("products").orderBy("author");
+                        break;
+                    case 3: // Default (by name)
+                        newQuery = FirebaseFirestore.getInstance().collection("products").orderBy("name");
+                        break;
+                    default:
+                        newQuery = FirebaseFirestore.getInstance().collection("products").orderBy("name");
+                        break;
+                }
+
+                FirestoreRecyclerOptions<products> newOptions = new FirestoreRecyclerOptions.Builder<products>()
+                        .setQuery(newQuery, products.class)
+                        .setLifecycleOwner(HomeFragment.this)
+                        .build();
+
+                adapter.updateOptions(newOptions);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // No action needed here
+            }
+        });
         adapter = new FirestoreRecyclerAdapter<products, ProductViewHolder>(options) {
             @NonNull
             @Override
@@ -133,15 +162,13 @@ public class HomeFragment extends Fragment {
             name = itemView.findViewById(R.id.name);
             author = itemView.findViewById(R.id.author);
             price = itemView.findViewById(R.id.price);
-            quantity = itemView.findViewById(R.id.quantity);
         }
 
         public void bind(products product) {
-            Glide.with(itemView.getContext()).load(product.getImageURL()).into(imageurl);
+            Glide.with(itemView.getContext()).load(product.getImageurl()).into(imageurl);
             name.setText(product.getName());
             author.setText(product.getAuthor());
             price.setText(String.valueOf(product.getPrice()));
-            quantity.setText(String.valueOf(product.getQuantity()));
         }
     }
 }
