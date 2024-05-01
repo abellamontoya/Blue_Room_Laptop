@@ -36,7 +36,7 @@
         tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/cartFragment"
-        android:name="com.example.blueroom.cartFragment"
+        android:name="com.example.blueroom.CartFragment"
         android:label="fragment_cart"
         tools:layout="@layout/fragment_cart" />
     <fragment
@@ -44,5 +44,9 @@
         android:name="com.example.blueroom.AddProductFragment"
         android:label="Add Product"
         tools:layout="@layout/fragment_add_product" />
-
+    <fragment
+        android:id="@+id/showProduct"
+        android:name="com.example.blueroom.ShowProduct"
+        android:label="fragment_show_product"
+        tools:layout="@layout/fragment_show_product" />
 </navigation>

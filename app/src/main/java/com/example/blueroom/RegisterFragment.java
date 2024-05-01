@@ -1,5 +1,8 @@
 package com.example.blueroom;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -22,13 +25,13 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-
 public class RegisterFragment extends Fragment {
 
     NavController navController;
     private EditText emailEditText, passwordEditText;
     private Button registerButton;
     private FirebaseAuth mAuth;
+    private SharedPreferences sharedPreferences;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,6 +45,7 @@ public class RegisterFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(view);
         mAuth = FirebaseAuth.getInstance();
+        sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", MODE_PRIVATE);
 
         emailEditText = view.findViewById(R.id.emailEditText);
         passwordEditText = view.findViewById(R.id.passwordEditText);
@@ -55,6 +59,7 @@ public class RegisterFragment extends Fragment {
             }
         });
     }
+
     private void crearCuenta() {
         if (!validarFormulario()) {
             return;
@@ -67,19 +72,19 @@ public class RegisterFragment extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            // Update isLoggedIn preference
+                            sharedPreferences.edit().putBoolean("isLoggedIn", true).apply();
                             actualizarUI(mAuth.getCurrentUser());
                         } else {
                             Snackbar.make(requireView(), "Error: " + task.getException(), Snackbar.LENGTH_LONG).show();
-
                         }
                         registerButton.setEnabled(true);
                     }
                 });
-
     }
 
     private void actualizarUI(FirebaseUser currentUser) {
-        if(currentUser != null){
+        if (currentUser != null) {
             navController.navigate(R.id.homeFragment);
         }
     }

@@ -1,6 +1,7 @@
 package com.example.blueroom;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -29,6 +30,7 @@ public class FinalLogin extends Fragment {
     private ProgressBar signInProgressBar;
     private FirebaseAuth mAuth;
     private NavController navController;
+    private SharedPreferences sharedPreferences;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,12 +45,13 @@ public class FinalLogin extends Fragment {
 
         mAuth = FirebaseAuth.getInstance();
         navController = Navigation.findNavController(view);
+        sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Activity.MODE_PRIVATE);
 
         emailEditText = view.findViewById(R.id.emailEditText);
         passwordEditText = view.findViewById(R.id.passwordEditText);
         emailSignInButton = view.findViewById(R.id.registerButton);
         signInForm = view.findViewById(R.id.signInForm);
-        signInProgressBar = view.findViewById(R.id.signInProgressBar); // Asegúrate de que este ProgressBar está presente en tu layout
+        signInProgressBar = view.findViewById(R.id.signInProgressBar); // Ensure this ProgressBar is present in your layout
 
         if (emailSignInButton != null) {
             emailSignInButton.setOnClickListener(new View.OnClickListener() {
@@ -62,12 +65,6 @@ public class FinalLogin extends Fragment {
         }
     }
 
-
-
-
-
-
-
     private void signInWithEmailAndPassword() {
         signInForm.setVisibility(View.GONE);
         signInProgressBar.setVisibility(View.VISIBLE);
@@ -75,6 +72,9 @@ public class FinalLogin extends Fragment {
         mAuth.signInWithEmailAndPassword(emailEditText.getText().toString(), passwordEditText.getText().toString())
                 .addOnCompleteListener(requireActivity(), task -> {
                     if (task.isSuccessful()) {
+                        // Update isLoggedIn preference
+                        sharedPreferences.edit().putBoolean("isLoggedIn", true).apply();
+
                         FirebaseUser user = mAuth.getCurrentUser();
                         if (user != null) {
                             // Navigate to home fragment or any other fragment upon successful login

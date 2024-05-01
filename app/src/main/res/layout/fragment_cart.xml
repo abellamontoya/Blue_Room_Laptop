@@ -19,6 +19,7 @@
         app:layout_constraintBottom_toTopOf="@id/cartFragment">
 
         <TextView
+            android:fontFamily="@font/font"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="The Blue Room"
@@ -42,6 +43,7 @@
         app:layout_constraintBottom_toBottomOf="parent"/>
     <Button
         android:layout_width="wrap_content"
+        android:fontFamily="@font/font"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="haii^^"

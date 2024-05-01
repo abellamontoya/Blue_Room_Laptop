@@ -57,8 +57,20 @@ public class products {
         this.date = date;
     }
 
+    public long getDate() {
+        return date;
+    }
+
+    public String getType() {
+        return type;
+    }
+
     public void setType(String type) {
         this.type = type;
+    }
+
+    public List<String> getTag() {
+        return tag;
     }
 
     public void setTag(List<String> tag) {

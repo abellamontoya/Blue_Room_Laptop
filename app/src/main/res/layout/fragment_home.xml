@@ -22,8 +22,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="The Blue Room"
+            android:fontFamily="@font/font"
             android:textColor="@color/black"
-            android:textSize="18sp"
+            android:textSize="24sp"
             android:textStyle="bold"
             android:layout_marginTop="16dp"
             android:layout_marginStart="16dp"
@@ -39,6 +40,7 @@
 
             <EditText
                 android:layout_width="0dp"
+                android:fontFamily="@font/font"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/rounded_black"
@@ -53,11 +55,11 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:background="@color/less_clear_blue">
-                <Spinner
-                    android:id="@+id/spinner"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-                </Spinner>
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:entries="@array/sort_options" />
         </LinearLayout>
     </LinearLayout>
 

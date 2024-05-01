@@ -2,6 +2,7 @@ package com.example.blueroom;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResult;
@@ -37,8 +38,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-
 public class SignInFragment extends Fragment {
+
     NavController navController;
     private EditText emailEditText, passwordEditText;
     private Button emailSignInButton;
@@ -47,6 +48,8 @@ public class SignInFragment extends Fragment {
     private FirebaseAuth mAuth;
     private SignInButton googleSignInButton;
     private ActivityResultLauncher<Intent> activityResultLauncher;
+    private SharedPreferences sharedPreferences;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -60,12 +63,13 @@ public class SignInFragment extends Fragment {
 
         mAuth = FirebaseAuth.getInstance();
         navController = Navigation.findNavController(view);
+        sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Activity.MODE_PRIVATE);
+
         emailEditText = view.findViewById(R.id.emailEditText);
         passwordEditText = view.findViewById(R.id.passwordEditText);
         emailSignInButton = view.findViewById(R.id.emailSignInButton);
         signInForm = view.findViewById(R.id.signInForm);
         signInProgressBar = view.findViewById(R.id.signInProgressBar);
-
         googleSignInButton = view.findViewById(R.id.googleSignInButton);
 
         view.findViewById(R.id.gotoCreateAccountTextView).setOnClickListener(new View.OnClickListener() {
@@ -74,30 +78,30 @@ public class SignInFragment extends Fragment {
                 navController.navigate(R.id.registerFragment);
             }
         });
+
         emailSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Navegar a fragment_final_login
-                navController.navigate(R.id.finalLogin);
+                accederConEmail();
             }
         });
+
         activityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
                     @Override
                     public void onActivityResult(ActivityResult result) {
                         if (result.getResultCode() == Activity.RESULT_OK) {
-
                             Intent data = result.getData();
                             try {
                                 firebaseAuthWithGoogle(GoogleSignIn.getSignedInAccountFromIntent(data).getResult(ApiException.class));
                             } catch (ApiException e) {
-                                Log.e("ABCD", "signInResult:failed code=" +
-                                        e.getStatusCode());
+                                Log.e("ABCD", "signInResult:failed code=" + e.getStatusCode());
                             }
                         }
                     }
                 });
+
         googleSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -105,6 +109,7 @@ public class SignInFragment extends Fragment {
             }
         });
     }
+
     private void accederConEmail() {
         signInForm.setVisibility(View.GONE);
         signInProgressBar.setVisibility(View.VISIBLE);
@@ -114,6 +119,8 @@ public class SignInFragment extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            // Update isLoggedIn preference
+                            sharedPreferences.edit().putBoolean("isLoggedIn", true).apply();
                             actualizarUI(mAuth.getCurrentUser());
                         } else {
                             Snackbar.make(requireView(), "Error: " + task.getException(), Snackbar.LENGTH_LONG).show();
@@ -125,37 +132,38 @@ public class SignInFragment extends Fragment {
     }
 
     private void actualizarUI(FirebaseUser currentUser) {
-        if(currentUser != null){
+        if (currentUser != null) {
             navController.navigate(R.id.homeFragment);
         }
     }
+
     private void accederConGoogle() {
         GoogleSignInClient googleSignInClient =
-                GoogleSignIn.getClient(requireActivity(), new
-                        GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                GoogleSignIn.getClient(requireActivity(), new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                         .requestIdToken(getString(R.string.default_web_client_id))
                         .requestEmail()
                         .build());
         activityResultLauncher.launch(googleSignInClient.getSignInIntent());
     }
+
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-        if(acct == null) return;
+        if (acct == null) return;
         signInProgressBar.setVisibility(View.VISIBLE);
         signInForm.setVisibility(View.GONE);
+
         mAuth.signInWithCredential(GoogleAuthProvider.getCredential(acct.getIdToken(), null))
                 .addOnCompleteListener(requireActivity(), new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    Log.e("ABCD", "signInWithCredential:success");
-                                    actualizarUI(mAuth.getCurrentUser());
-                                } else {
-                                    Log.e("ABCD", "signInWithCredential:failure",
-                                            task.getException());
-                                    signInProgressBar.setVisibility(View.GONE);
-                                    signInForm.setVisibility(View.VISIBLE);
-                                }
-                            }
-                        });
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Log.e("ABCD", "signInWithCredential:success");
+                            actualizarUI(mAuth.getCurrentUser());
+                        } else {
+                            Log.e("ABCD", "signInWithCredential:failure", task.getException());
+                            signInProgressBar.setVisibility(View.GONE);
+                            signInForm.setVisibility(View.VISIBLE);
+                        }
+                    }
+                });
     }
 }

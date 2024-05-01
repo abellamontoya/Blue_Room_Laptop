@@ -13,10 +13,13 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 import com.example.blueroom.databinding.ActivityMainBinding;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
     private SharedPreferences sharedPreferences;
+    private ArrayList<products> cartProducts = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
