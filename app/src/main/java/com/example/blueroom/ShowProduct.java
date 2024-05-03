@@ -4,8 +4,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,13 +25,17 @@ import com.google.firebase.firestore.Query;
 import java.util.ArrayList;
 
 public class ShowProduct extends Fragment {
+
+    private ArrayList<products> cartProducts = new ArrayList<>();
+
     private String author;
     private String imageUrl;
     private String name;
-    private double price;
+    private float price;
     private int quantity;
     private String type;
     private ArrayList<String> tag;
+
     private NavController navController;
 
     public ShowProduct() {
@@ -44,11 +50,15 @@ public class ShowProduct extends Fragment {
             author = getArguments().getString("author", "");
             imageUrl = getArguments().getString("imageurl", "");
             name = getArguments().getString("name", "");
-            price = getArguments().getDouble("price", 0);
+            price = getArguments().getFloat("price", 0);
             quantity = getArguments().getInt("quantity", 0);
             type = getArguments().getString("type", "");
             tag = getArguments().getStringArrayList("tag");
         }
+
+        // Retrieve cart products from the application class or wherever they are stored
+        MyApp myApp = (MyApp) requireActivity().getApplication();
+        cartProducts = myApp.getCartProducts();
     }
 
     @Override
@@ -88,11 +98,19 @@ public class ShowProduct extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         navController = NavHostFragment.findNavController(this);
 
         RecyclerView recyclerView = view.findViewById(R.id.related_recyclerview);
 
+        Button buyButton = view.findViewById(R.id.buy);
+        buyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MyApp myApp = (MyApp) requireActivity().getApplication();
+                myApp.addProductToCart(new products(author, imageUrl, name, price, quantity));
+                Toast.makeText(getContext(), "Product added to cart", Toast.LENGTH_SHORT).show();
+            }
+        });
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
 

@@ -1,8 +1,9 @@
 package com.example.blueroom;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class products {
+public class products implements Serializable {
     public String author;
     public String imageurl;
     public String name;
@@ -31,6 +32,9 @@ public class products {
         this.date = date;
         this.type = type;
         this.tag = tag;
+    }
+
+    public products(String author, String imageUrl, String name, double price) {
     }
 
     public void setAuthor(String author) {
