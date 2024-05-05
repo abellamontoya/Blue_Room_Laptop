@@ -31,7 +31,6 @@ public class CartFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Retrieve cart products from the application class or wherever they are stored
         MyApp myApp = (MyApp) requireActivity().getApplication();
         cartProducts = myApp.getCartProducts();
     }
@@ -58,29 +57,21 @@ public class CartFragment extends Fragment {
 
         public CartViewHolder(@NonNull View itemView) {
             super(itemView);
-            nameTextView = itemView.findViewById(R.id.name);
-            authorTextView = itemView.findViewById(R.id.author);
-            priceTextView = itemView.findViewById(R.id.price);
+            nameTextView = itemView.findViewById(R.id.albumname);
+            authorTextView = itemView.findViewById(R.id.authorname);
+            priceTextView = itemView.findViewById(R.id.priceoftheitem);
+            imageView = itemView.findViewById(R.id.albumcover);
             quantityTextView = itemView.findViewById(R.id.quantity);
-            imageView = itemView.findViewById(R.id.imageurl);
-            deleteButton = itemView.findViewById(R.id.delete);
+            deleteButton = itemView.findViewById(R.id.deleteitem);
         }
 
         public void bind(products product) {
             nameTextView.setText(product.getName());
             authorTextView.setText(product.getAuthor());
             priceTextView.setText(String.valueOf(product.getPrice()));
-            quantityTextView.setText(String.valueOf(product.getQuantity()));
 
-            // Load image from URL into ImageView using Glide if the URL is not null
-            if (product.getImageurl() != null) {
-                Glide.with(itemView.getContext())
-                        .load(product.getImageurl())
-                        .into(imageView);
-            } else {
-                // Handle null URL case, for example, setting a placeholder image
-                imageView.setImageResource(R.drawable.user);
-            }
+            // Load image from URL into ImageView using Glide
+            Glide.with(itemView.getContext()).load(product.getImageurl()).into(imageView);
 
             deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -89,6 +80,8 @@ public class CartFragment extends Fragment {
                 }
             });
         }
+
+
     }
 
     class CartAdapter extends RecyclerView.Adapter<CartViewHolder> {

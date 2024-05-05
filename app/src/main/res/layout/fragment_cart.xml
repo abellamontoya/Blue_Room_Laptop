@@ -12,24 +12,19 @@
         android:id="@+id/vert"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="25dp"
-        android:orientation="vertical"
         android:background="@color/clear_blue"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/cartFragment">
+        android:orientation="vertical"
+        android:padding="21dp"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:fontFamily="@font/font"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="The Blue Room"
+            android:fontFamily="@font/font"
             android:textColor="@color/black"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginTop="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="8dp"/>
+            android:textSize="24sp"
+            android:textStyle="bold" />
     </LinearLayout>
 
 

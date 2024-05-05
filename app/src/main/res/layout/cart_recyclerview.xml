@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-
     <LinearLayout
         android:id="@+id/productInfoLayout"
         android:layout_width="match_parent"
@@ -17,14 +16,17 @@
         android:padding="10dp"
         android:layout_margin="10dp">
 
+        <!-- ImageView for product image -->
         <ImageView
-            android:id="@+id/imageurl"
+            android:id="@+id/albumcover"
             android:layout_width="wrap_content"
             android:layout_height="180dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@id/productInfoLayout" />
+
+        <!-- LinearLayout for product details -->
         <LinearLayout
             android:id="@+id/second"
             android:layout_width="wrap_content"
@@ -36,9 +38,11 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:padding="16dp">
+
+            <!-- TextViews for product details -->
             <TextView
                 android:fontFamily="@font/font"
-                android:id="@+id/name"
+                android:id="@+id/albumname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
@@ -48,7 +52,7 @@
                 android:text="Product Name" />
 
             <TextView
-                android:id="@+id/author"
+                android:id="@+id/authorname"
                 android:fontFamily="@font/font"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -57,13 +61,14 @@
                 android:text="Author" />
 
             <TextView
-                android:id="@+id/price"
+                android:id="@+id/priceoftheitem"
                 android:layout_width="wrap_content"
                 android:fontFamily="@font/font"
                 android:layout_height="wrap_content"
                 android:text="Price"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
+
             <TextView
                 android:id="@+id/quantity"
                 android:layout_width="wrap_content"
@@ -74,8 +79,10 @@
                 android:text="Quantity" />
 
         </LinearLayout>
+
+        <!-- Button for delete action -->
         <Button
-            android:id="@+id/delete"
+            android:id="@+id/deleteitem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/font"

@@ -34,7 +34,7 @@ public class HomeFragment extends Fragment implements ProductAdapter.OnProductCl
     private NavController navController;
     private AppViewModel appViewModel;
     private ImageView photoImageView;
-    private ProductAdapter adapter; // Cambio aquí
+    private ProductAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -138,7 +138,6 @@ public class HomeFragment extends Fragment implements ProductAdapter.OnProductCl
 
         navController.navigate(R.id.showProduct, bundle);
     }
-
 
     static class ProductViewHolder extends RecyclerView.ViewHolder {
         ImageView imageurl;

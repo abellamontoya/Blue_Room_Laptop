@@ -72,19 +72,28 @@ public class FinalLogin extends Fragment {
         mAuth.signInWithEmailAndPassword(emailEditText.getText().toString(), passwordEditText.getText().toString())
                 .addOnCompleteListener(requireActivity(), task -> {
                     if (task.isSuccessful()) {
-                        // Update isLoggedIn preference
-                        sharedPreferences.edit().putBoolean("isLoggedIn", true).apply();
-
                         FirebaseUser user = mAuth.getCurrentUser();
                         if (user != null) {
-                            // Navigate to home fragment or any other fragment upon successful login
-                            navController.navigate(R.id.homeFragment);
+                            // Get user details
+                            String nickname = user.getDisplayName();
+                            String phoneNumber = user.getPhoneNumber();
+
+                            // Save user details to SharedPreferences
+                            sharedPreferences.edit()
+                                    .putString("textoEditable", nickname)
+                                    .putString("phoneNumber", phoneNumber)
+                                    .putBoolean("isLoggedIn", true)
+                                    .apply();
+
+                            // Navigate to profile fragment
+                            navController.navigate(R.id.profileFragment);
                         }
                     } else {
                         Snackbar.make(requireView(), "Error: " + task.getException(), Snackbar.LENGTH_LONG).show();
+                        signInForm.setVisibility(View.VISIBLE);
+                        signInProgressBar.setVisibility(View.GONE);
                     }
-                    signInForm.setVisibility(View.VISIBLE);
-                    signInProgressBar.setVisibility(View.GONE);
                 });
     }
+
 }
