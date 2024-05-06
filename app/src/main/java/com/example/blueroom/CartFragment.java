@@ -25,7 +25,6 @@ public class CartFragment extends Fragment {
     private CartAdapter adapter;
 
     public CartFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -38,7 +37,6 @@ public class CartFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_cart, container, false);
 
         recyclerView = view.findViewById(R.id.cartFragment);
@@ -51,32 +49,31 @@ public class CartFragment extends Fragment {
 
     static class CartViewHolder extends RecyclerView.ViewHolder {
 
-        TextView nameTextView, authorTextView, priceTextView, quantityTextView;
-        ImageView imageView;
+        TextView name, author, price, quantity;
+        ImageView imageurl;
         Button deleteButton;
 
         public CartViewHolder(@NonNull View itemView) {
             super(itemView);
-            nameTextView = itemView.findViewById(R.id.albumname);
-            authorTextView = itemView.findViewById(R.id.authorname);
-            priceTextView = itemView.findViewById(R.id.priceoftheitem);
-            imageView = itemView.findViewById(R.id.albumcover);
-            quantityTextView = itemView.findViewById(R.id.quantity);
+            name = itemView.findViewById(R.id.albumname);
+            author = itemView.findViewById(R.id.authorname);
+            price = itemView.findViewById(R.id.priceoftheitem);
+            imageurl = itemView.findViewById(R.id.albumcover);
+            quantity = itemView.findViewById(R.id.quantity);
             deleteButton = itemView.findViewById(R.id.deleteitem);
         }
 
         public void bind(products product) {
-            nameTextView.setText(product.getName());
-            authorTextView.setText(product.getAuthor());
-            priceTextView.setText(String.valueOf(product.getPrice()));
+            name.setText(product.getName());
+            author.setText(product.getAuthor());
+            price.setText(String.valueOf(product.getPrice()));
 
-            // Load image from URL into ImageView using Glide
-            Glide.with(itemView.getContext()).load(product.getImageurl()).into(imageView);
+            Glide.with(itemView.getContext()).load(product.getImageurl()).into(imageurl);
 
             deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // Implement delete logic here
+
                 }
             });
         }

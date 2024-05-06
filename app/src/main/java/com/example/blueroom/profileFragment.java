@@ -166,7 +166,14 @@ public class profileFragment extends Fragment {
                             String id = documentSnapshot.getString(ID);
                             String editableText = documentSnapshot.getString(TEXTO_KEY);
 
-                            // Set the EditText and TextView values here
+                            // Set the EditText and TextView values
+                            countryEditText.setText(country);
+                            phoneNumberEditText.setText(phoneNumber);
+                            addressEditText.setText(address);
+                            postalCodeEditText.setText(postalCode);
+                            cityEditText.setText(city);
+                            idEditText.setText(id);
+                            textoEditable.setText(editableText);
                         } else {
                             Log.d(TAG, "No such document");
                         }
@@ -176,6 +183,7 @@ public class profileFragment extends Fragment {
             Log.e(TAG, "User is null. Profile data cannot be loaded.");
         }
     }
+
 
 
 }
