@@ -17,7 +17,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.SearchView;
 import android.widget.Spinner;
 
 import com.bumptech.glide.Glide;
@@ -45,6 +48,10 @@ public class HomeFragment extends Fragment implements ProductAdapter.OnProductCl
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(view);
+        Spinner spinner2 = view.findViewById(R.id.spinner2);
+        CheckBox checkVinyl = view.findViewById(R.id.checkVinyl);
+        CheckBox checkCd = view.findViewById(R.id.checkCd);
+
 
         appViewModel = new ViewModelProvider(requireActivity()).get(AppViewModel.class);
 
@@ -94,6 +101,7 @@ public class HomeFragment extends Fragment implements ProductAdapter.OnProductCl
             }
         });
 
+
         adapter = new ProductAdapter(options, this);
         recyclerView.setAdapter(adapter);
 
@@ -131,7 +139,7 @@ public class HomeFragment extends Fragment implements ProductAdapter.OnProductCl
         bundle.putString("author", product.getAuthor());
         bundle.putString("imageurl", product.getImageurl());
         bundle.putString("name", product.getName());
-        bundle.putDouble("price", product.getPrice());
+        bundle.putFloat("price", product.getPrice());
         bundle.putDouble("quantity", product.getQuantity());
         bundle.putString("type", product.getType()); // Obtener el tipo del producto
         bundle.putStringArrayList("tag", new ArrayList<>(product.getTag())); // Obtener la lista de tags del producto

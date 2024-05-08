@@ -23,6 +23,7 @@ public class CartFragment extends Fragment {
     private ArrayList<products> cartProducts;
     private RecyclerView recyclerView;
     private CartAdapter adapter;
+    private Button buyButton;
 
     public CartFragment() {
     }
@@ -44,7 +45,26 @@ public class CartFragment extends Fragment {
         adapter = new CartAdapter(cartProducts);
         recyclerView.setAdapter(adapter);
 
+        buyButton = view.findViewById(R.id.buycart);
+
+        updateBuyButtonText(); // Update Buy button text when fragment is created
+
         return view;
+    }
+
+    // Calculate total price of products in the cart
+    private double calculateTotalPrice() {
+        double totalPrice = 0;
+        for (products product : cartProducts) {
+            totalPrice += product.getPrice();
+        }
+        return totalPrice;
+    }
+
+    // Update text on Buy button
+    private void updateBuyButtonText() {
+        double totalPrice = calculateTotalPrice();
+        buyButton.setText(String.format("Buy (%.2f €)", totalPrice));
     }
 
     static class CartViewHolder extends RecyclerView.ViewHolder {

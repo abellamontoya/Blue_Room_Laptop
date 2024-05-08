@@ -38,17 +38,15 @@
             android:orientation="horizontal"
             android:gravity="center_vertical">
 
-            <EditText
+            <SearchView
+                android:id="@+id/searchbar"
                 android:layout_width="0dp"
                 android:fontFamily="@font/font"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/rounded_black"
                 android:backgroundTint="@color/white"
-                android:hint="Search"
-                android:textColor="@color/black"
-                android:padding="10dp"
-                android:textColorHint="@color/grey"/>
+                android:textColor="@color/black" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -57,23 +55,45 @@
             android:background="@color/less_clear_blue">
             <Spinner
                 android:id="@+id/spinner"
+                android:layout_width="125dp"
+                android:layout_height="wrap_content"
+                android:entries="@array/sort_options"/>
+            <Spinner
+                android:id="@+id/spinner2"
+                android:layout_width="125dp"
+                android:layout_height="wrap_content"
+                android:entries="@array/sort_options"/>
+            <CheckBox
+                android:id="@+id/checkVinyl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:entries="@array/sort_options" />
+                android:text="Vinyl">
+            </CheckBox>
+            <CheckBox
+                android:id="@+id/checkCd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CD">
+            </CheckBox>
         </LinearLayout>
     </LinearLayout>
-
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        app:spanCount="2"
         app:layout_constraintTop_toBottomOf="@id/vert"
-        app:layout_constraintBottom_toBottomOf="@id/miau"/>
+        app:layout_constraintBottom_toBottomOf="@id/miau">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="2"/>
+
+    </LinearLayout>
+
 
     <TextView
         android:id="@+id/miau"

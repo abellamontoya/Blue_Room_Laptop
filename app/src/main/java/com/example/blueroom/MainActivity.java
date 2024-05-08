@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDestinationChanged(@NonNull NavController controller,
                                              @NonNull NavDestination destination, @Nullable Bundle arguments) {
-                if (destination.getId() == R.id.signInFragment || destination.getId() == R.id.registerFragment || destination.getId() == R.id.showProduct) {
+                if (destination.getId() == R.id.signInFragment || destination.getId() == R.id.registerFragment || destination.getId() == R.id.searchFragment || destination.getId() == R.id.showProduct) {
                     binding.bottomNavView.setVisibility(View.GONE);
                 } else {
                     binding.bottomNavView.setVisibility(View.VISIBLE);

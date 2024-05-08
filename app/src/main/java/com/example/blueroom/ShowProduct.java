@@ -33,6 +33,7 @@ public class ShowProduct extends Fragment {
     private String name;
     private float price;
     private int quantity;
+    private int date;
     private String type;
     private ArrayList<String> tag;
 
@@ -56,7 +57,6 @@ public class ShowProduct extends Fragment {
             tag = getArguments().getStringArrayList("tag");
         }
 
-        // Retrieve cart products from the application class or wherever they are stored
         MyApp myApp = (MyApp) requireActivity().getApplication();
         cartProducts = myApp.getCartProducts();
     }
@@ -107,7 +107,7 @@ public class ShowProduct extends Fragment {
             @Override
             public void onClick(View v) {
                 MyApp myApp = (MyApp) requireActivity().getApplication();
-                myApp.addProductToCart(new products(author, imageUrl, name, price, quantity));
+                myApp.addProductToCart(new products(imageUrl, name, author, price, quantity));
                 Toast.makeText(getContext(), "Product added to cart", Toast.LENGTH_SHORT).show();
             }
         });
