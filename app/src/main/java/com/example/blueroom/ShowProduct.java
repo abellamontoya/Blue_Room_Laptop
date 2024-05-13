@@ -1,5 +1,8 @@
 package com.example.blueroom;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -52,7 +56,7 @@ public class ShowProduct extends Fragment {
             imageUrl = getArguments().getString("imageurl", "");
             name = getArguments().getString("name", "");
             price = getArguments().getFloat("price", 0);
-            quantity = getArguments().getInt("quantity", 0);
+            date = getArguments().getInt("date", 0); // Obtener el valor de date aquí
             type = getArguments().getString("type", "");
             tag = getArguments().getStringArrayList("tag");
         }
@@ -60,6 +64,7 @@ public class ShowProduct extends Fragment {
         MyApp myApp = (MyApp) requireActivity().getApplication();
         cartProducts = myApp.getCartProducts();
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -70,15 +75,15 @@ public class ShowProduct extends Fragment {
         ImageView imageView = view.findViewById(R.id.image);
         TextView nameTextView = view.findViewById(R.id.name);
         TextView priceTextView = view.findViewById(R.id.price);
-        TextView quantityTextView = view.findViewById(R.id.quantity);
         TextView typeTextView = view.findViewById(R.id.type);
         TextView tagTextView = view.findViewById(R.id.tag);
+        TextView dateTextView = view.findViewById(R.id.date);
 
         authorTextView.setText(author);
         nameTextView.setText(name);
         priceTextView.setText(String.valueOf(price));
-        quantityTextView.setText(String.valueOf(quantity));
         typeTextView.setText(type);
+        dateTextView.setText(String.valueOf(date));
         if (tag != null && !tag.isEmpty()) {
             StringBuilder tagBuilder = new StringBuilder();
             for (String tagItem : tag) {
@@ -108,8 +113,32 @@ public class ShowProduct extends Fragment {
             public void onClick(View v) {
                 MyApp myApp = (MyApp) requireActivity().getApplication();
                 myApp.addProductToCart(new products(imageUrl, name, author, price, quantity));
-                Toast.makeText(getContext(), "Product added to cart", Toast.LENGTH_SHORT).show();
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setMessage("Producto añadido al carrito")
+                        .setCancelable(false)
+                        .setPositiveButton("Ir al carrito", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // Aquí puedes abrir la actividad del carrito o realizar alguna acción relacionada
+                                openCartFragment();
+                            }
+                        })
+                        .setNegativeButton("Continuar comprando", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // Aquí puedes dejar que el usuario continúe en la pantalla actual o realizar alguna otra acción
+                            }
+                        });
+                AlertDialog alert = builder.create();
+                alert.show();
             }
+
+            private void openCartFragment() {
+                // Navegar al fragmento del carrito
+                navController.navigate(R.id.cartFragment);
+            }
+
+
+
         });
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
@@ -147,13 +176,15 @@ public class ShowProduct extends Fragment {
                 bundle.putString("author", product.getAuthor());
                 bundle.putString("imageurl", product.getImageurl());
                 bundle.putString("name", product.getName());
-                bundle.putDouble("price", product.getPrice());
-                bundle.putDouble("quantity", product.getQuantity());
+                bundle.putFloat("price", product.getPrice());
+                bundle.putFloat("quantity", product.getQuantity());
+                bundle.putInt("date", product.getDate()); // Asegúrate de incluir date aquí
                 bundle.putString("type", product.getType());
                 bundle.putStringArrayList("tag", new ArrayList<>(product.getTag()));
 
                 navController.navigate(R.id.showProduct, bundle);
             }
+
         };
 
         ProductAdapter adapter = new ProductAdapter(options, listener);

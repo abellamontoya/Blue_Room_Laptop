@@ -52,6 +52,21 @@ public class HomeFragment extends Fragment implements ProductAdapter.OnProductCl
         CheckBox checkVinyl = view.findViewById(R.id.checkVinyl);
         CheckBox checkCd = view.findViewById(R.id.checkCd);
 
+        SearchView searchView = view.findViewById(R.id.searchbar);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // No necesitamos manejar la acción de enviar aquí
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                // Realizar la búsqueda en Firestore cuando el texto cambie
+                searchFirestore(newText);
+                return true;
+            }
+        });
 
         appViewModel = new ViewModelProvider(requireActivity()).get(AppViewModel.class);
 
@@ -124,6 +139,25 @@ public class HomeFragment extends Fragment implements ProductAdapter.OnProductCl
             adapter.startListening();
         }
     }
+    private void searchFirestore(String searchText) {
+        Query baseQuery = FirebaseFirestore.getInstance().collection("products");
+
+        if (searchText != null && !searchText.trim().isEmpty()) {
+            String queryText = searchText.trim().toLowerCase();
+
+            // Crear una consulta que busque documentos donde el campo name_lowercase contenga la cadena de búsqueda
+            baseQuery = baseQuery.whereArrayContains("name_lowercase", queryText);
+        }
+
+        FirestoreRecyclerOptions<products> options = new FirestoreRecyclerOptions.Builder<products>()
+                .setQuery(baseQuery, products.class)
+                .setLifecycleOwner(this)
+                .build();
+
+        adapter.updateOptions(options);
+    }
+
+
 
     @Override
     public void onStop() {
@@ -139,13 +173,14 @@ public class HomeFragment extends Fragment implements ProductAdapter.OnProductCl
         bundle.putString("author", product.getAuthor());
         bundle.putString("imageurl", product.getImageurl());
         bundle.putString("name", product.getName());
+        bundle.putInt("date", product.getDate());
         bundle.putFloat("price", product.getPrice());
-        bundle.putDouble("quantity", product.getQuantity());
         bundle.putString("type", product.getType()); // Obtener el tipo del producto
         bundle.putStringArrayList("tag", new ArrayList<>(product.getTag())); // Obtener la lista de tags del producto
 
         navController.navigate(R.id.showProduct, bundle);
     }
+
 
     static class ProductViewHolder extends RecyclerView.ViewHolder {
         ImageView imageurl;

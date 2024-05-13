@@ -9,7 +9,7 @@ public class products implements Serializable {
     public String name;
     public float quantity;
     public float price;
-    public long date;
+    public int date;
     public String type;
     public List<String> tag;  // Cambia este campo a List<String>
 
@@ -23,7 +23,7 @@ public class products implements Serializable {
         this.quantity = quantity;
     }
 
-    public products(String author, String imageURL, String name, float quantity, float price, long date, String type, List<String> tag) {
+    public products(String author, String imageURL, String name, float quantity, float price, int date, String type, List<String> tag) {
         this.author = author;
         this.imageurl = imageURL;
         this.name = name;
@@ -57,11 +57,11 @@ public class products implements Serializable {
         this.price = price;
     }
 
-    public void setDate(long date) {
+    public void setDate(int date) {
         this.date = date;
     }
 
-    public long getDate() {
+    public int getDate() {
         return date;
     }
 
