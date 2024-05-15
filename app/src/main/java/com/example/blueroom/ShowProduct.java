@@ -1,13 +1,16 @@
 package com.example.blueroom;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,6 +43,7 @@ public class ShowProduct extends Fragment {
     private int date;
     private String type;
     private ArrayList<String> tag;
+    SharedPreferences favoritesPreferences;
 
     private NavController navController;
 
@@ -105,6 +109,7 @@ public class ShowProduct extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         navController = NavHostFragment.findNavController(this);
 
+
         RecyclerView recyclerView = view.findViewById(R.id.related_recyclerview);
 
         Button buyButton = view.findViewById(R.id.buy);
@@ -140,6 +145,20 @@ public class ShowProduct extends Fragment {
 
 
         });
+        favoritesPreferences = requireContext().getSharedPreferences("favorites", Context.MODE_PRIVATE);
+        SharedPreferences preferences = requireContext().getSharedPreferences("favorites", Context.MODE_PRIVATE);
+
+        boolean[] isFavorite = { preferences.getBoolean(name, false) }; // Load favorite status from SharedPreferences, default is false
+
+        ImageButton favoriteButton = view.findViewById(R.id.favorite_button);
+
+        favoriteButton.setOnClickListener(v -> {
+            toggleFavoriteStatus();
+        });
+        setFavoriteStatus();
+
+
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
 
@@ -148,7 +167,7 @@ public class ShowProduct extends Fragment {
         ArrayList<String> originalTags = getArguments().getStringArrayList("tag");
 
         Query query = FirebaseFirestore.getInstance().collection("products");
-
+            //PUTITA AÑADE QUE LOS QUE SE GUARDAN EN FAVORITOS EN EL BOTON SE GUARDEN EN UN FRAGMENT :33
         ArrayList<Query> tagQueries = new ArrayList<>();
 
         for (String tag : originalTags) {
@@ -189,5 +208,32 @@ public class ShowProduct extends Fragment {
 
         ProductAdapter adapter = new ProductAdapter(options, listener);
         recyclerView.setAdapter(adapter);
+    }
+    private void toggleFavoriteStatus() {
+        // Load current favorite status
+        boolean isFavorite = favoritesPreferences.getBoolean(name, false);
+        isFavorite = !isFavorite; // Toggle favorite status
+
+        // Save updated favorite status
+        SharedPreferences.Editor editor = favoritesPreferences.edit();
+        editor.putBoolean(name, isFavorite);
+        editor.apply();
+
+        // Update UI
+        setFavoriteButtonImage(isFavorite);
+    }
+
+    private void setFavoriteStatus() {
+        boolean isFavorite = favoritesPreferences.getBoolean(name, false);
+        setFavoriteButtonImage(isFavorite);
+    }
+
+    private void setFavoriteButtonImage(boolean isFavorite) {
+        ImageButton favoriteButton = getView().findViewById(R.id.favorite_button);
+        if (isFavorite) {
+            favoriteButton.setImageResource(R.drawable.fav);
+        } else {
+            favoriteButton.setImageResource(R.drawable.baseline_star_outline_24);
+        }
     }
 }

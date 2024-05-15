@@ -15,8 +15,7 @@
         android:padding="5dp"
         android:orientation="vertical"
         android:background="@color/clear_blue"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/recycler">
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:layout_width="wrap_content"
@@ -58,18 +57,32 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:entries="@array/sort_options"/>
-            <CheckBox
-                android:id="@+id/checkVinyl"
+            <RadioGroup
+                android:id="@+id/radioGroup"
+                android:orientation="horizontal"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Vinyl">
-            </CheckBox>
-            <CheckBox
-                android:id="@+id/checkCd"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="CD">
-            </CheckBox>
+                android:layout_height="wrap_content">
+
+                <RadioButton
+                    android:id="@+id/radioVinyl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Vinyl"/>
+
+                <RadioButton
+                    android:id="@+id/radioCd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CD"/>
+
+                <RadioButton
+                    android:id="@+id/radioAll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="All"/>
+
+            </RadioGroup>
+
         </LinearLayout>
     </LinearLayout>
     <LinearLayout

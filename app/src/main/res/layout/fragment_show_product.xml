@@ -129,29 +129,58 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/image" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <Button
-        android:id="@+id/buy"
+    <LinearLayout
+        android:id="@+id/buyandfav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/font"
-        app:layout_constraintTop_toBottomOf="@id/productInfoLayout"
-        android:text="Comprar"
-        android:backgroundTint="@color/material_dynamic_tertiary60"
-        android:textColor="@color/black"
+        android:orientation="horizontal"
         android:layout_marginTop="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp">
-    </Button>
+        android:layout_marginEnd="16dp"
+        android:gravity="end"
+        app:layout_constraintTop_toBottomOf="@id/productInfoLayout">
+        <Button
+            android:id="@+id/buy"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/font"
+            android:text="Comprar"
+            android:backgroundTint="@color/material_dynamic_tertiary60"
+            android:textColor="@color/black"/>
+
+        <ImageButton
+            android:id="@+id/favorite_button"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/baseline_star_outline_24"
+            android:backgroundTint="@color/white"/>
+
+    </LinearLayout>
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:background="@color/less_clear_blue"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@id/miau"
+        app:layout_constraintTop_toBottomOf="@id/buyandfav"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        >
+        <Button
+            android:id="@+id/botonpalplay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Play"
+            android:onClick="onPlayClicked" />
+
+        <SeekBar
+            android:id="@+id/audioSeekBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
         <TextView
             android:layout_gravity="center"
             android:textAppearance="?android:textAppearanceLarge"

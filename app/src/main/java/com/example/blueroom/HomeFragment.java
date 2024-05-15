@@ -17,11 +17,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.Spinner;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
@@ -38,7 +39,7 @@ public class HomeFragment extends Fragment implements ProductAdapter.OnProductCl
     private AppViewModel appViewModel;
     private ImageView photoImageView;
     private ProductAdapter adapter;
-    private Spinner spinner;
+    private RadioGroup radioGroup;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -49,34 +50,52 @@ public class HomeFragment extends Fragment implements ProductAdapter.OnProductCl
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(view);
-        CheckBox checkVinyl = view.findViewById(R.id.checkVinyl);
-        CheckBox checkCd = view.findViewById(R.id.checkCd);
 
         SearchView searchView = view.findViewById(R.id.searchbar);
-        // Your searchView listener code
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // No necesitamos manejar la acción de enviar aquí
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                // Realizar la búsqueda en Firestore cuando el texto cambie
+                searchFirestore(newText);
+                return true;
+            }
+        });
 
         appViewModel = new ViewModelProvider(requireActivity()).get(AppViewModel.class);
 
         recyclerView = view.findViewById(R.id.recycler);
         recyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 2));
 
-        spinner = view.findViewById(R.id.spinner);
-        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(requireContext(),
-                R.array.sort_options, android.R.layout.simple_spinner_item);
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(spinnerAdapter);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedOption = parent.getItemAtPosition(position).toString();
-                handleSorting(selectedOption);
+        radioGroup = view.findViewById(R.id.radioGroup);
+        /*radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            Query query;
+            switch (checkedId) {
+                case R.id.radioVinyl:
+                    query = FirebaseFirestore.getInstance().collection("products").whereEqualTo("type", "Vinyl").orderBy("name");
+                    break;
+                case R.id.radioCd:
+                    query = FirebaseFirestore.getInstance().collection("products").whereEqualTo("type", "CD").orderBy("name");
+                    break;
+                case R.id.radioAll:
+                default:
+                    query = FirebaseFirestore.getInstance().collection("products").orderBy("name");
+                    break;
             }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // Do nothing
-            }
-        });
+            FirestoreRecyclerOptions<products> options = new FirestoreRecyclerOptions.Builder<products>()
+                    .setQuery(query, products.class)
+                    .setLifecycleOwner(this)
+                    .build();
+
+            adapter.updateOptions(options);
+            adapter.notifyDataSetChanged();
+        });*/
 
         Query query = FirebaseFirestore.getInstance().collection("products").orderBy("name");
 
@@ -84,6 +103,44 @@ public class HomeFragment extends Fragment implements ProductAdapter.OnProductCl
                 .setQuery(query, products.class)
                 .setLifecycleOwner(this)
                 .build();
+
+        Spinner spinner = view.findViewById(R.id.spinner);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Query newQuery;
+                switch (position) {
+                    case 0: // Price Up
+                        newQuery = FirebaseFirestore.getInstance().collection("products").orderBy("price", Query.Direction.ASCENDING);
+                        break;
+                    case 1: // Price Down
+                        newQuery = FirebaseFirestore.getInstance().collection("products").orderBy("price", Query.Direction.DESCENDING);
+                        break;
+                    case 2: // Author
+                        newQuery = FirebaseFirestore.getInstance().collection("products").orderBy("author");
+                        break;
+                    case 3: // Default (by name)
+                    default:
+                        newQuery = FirebaseFirestore.getInstance().collection("products").orderBy("name");
+                        break;
+                }
+
+                FirestoreRecyclerOptions<products> newOptions = new FirestoreRecyclerOptions.Builder<products>()
+                        .setQuery(newQuery, products.class)
+                        .setLifecycleOwner(HomeFragment.this)
+                        .build();
+
+                // Apply the new query options to the adapter
+                adapter.updateOptions(newOptions);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // No action needed here
+            }
+        });
 
         adapter = new ProductAdapter(options, this);
         recyclerView.setAdapter(adapter);
@@ -100,34 +157,6 @@ public class HomeFragment extends Fragment implements ProductAdapter.OnProductCl
         }
     }
 
-    private void handleSorting(String selectedOption) {
-        Query query = FirebaseFirestore.getInstance().collection("products");
-
-        switch (selectedOption) {
-            case "Price Up":
-                query = query.orderBy("price", Query.Direction.ASCENDING);
-                break;
-            case "Price Down":
-                query = query.orderBy("price", Query.Direction.DESCENDING);
-                break;
-            case "Name":
-                query = query.orderBy("name");
-                break;
-            case "Author":
-                query = query.orderBy("author");
-                break;
-            default:
-                break;
-        }
-
-        FirestoreRecyclerOptions<products> options = new FirestoreRecyclerOptions.Builder<products>()
-                .setQuery(query, products.class)
-                .setLifecycleOwner(this)
-                .build();
-
-        adapter.updateOptions(options);
-    }
-
     @Override
     public void onStart() {
         super.onStart();
@@ -142,7 +171,7 @@ public class HomeFragment extends Fragment implements ProductAdapter.OnProductCl
         if (searchText != null && !searchText.trim().isEmpty()) {
             String queryText = searchText.trim().toLowerCase();
 
-            // Create a query to search documents where the name_lowercase field contains the search string
+            // Crear una consulta que busque documentos donde el campo name_lowercase contenga la cadena de búsqueda
             baseQuery = baseQuery.whereArrayContains("name_lowercase", queryText);
         }
 
@@ -170,11 +199,12 @@ public class HomeFragment extends Fragment implements ProductAdapter.OnProductCl
         bundle.putString("name", product.getName());
         bundle.putInt("date", product.getDate());
         bundle.putFloat("price", product.getPrice());
-        bundle.putString("type", product.getType()); // Get the product type
-        bundle.putStringArrayList("tag", new ArrayList<>(product.getTag())); // Get the product tags list
+        bundle.putString("type", product.getType()); // Obtener el tipo del producto
+        bundle.putStringArrayList("tag", new ArrayList<>(product.getTag())); // Obtener la lista de tags del producto
 
         navController.navigate(R.id.showProduct, bundle);
     }
+
 
     static class ProductViewHolder extends RecyclerView.ViewHolder {
         ImageView imageurl;
