@@ -9,8 +9,8 @@
     <string-array name="sort_options">
         <item>Price Up</item>
         <item>Price Down</item>
+        <item>Name</item>
         <item>Author</item>
-        <item>Default</item>
     </string-array>
 
     <string name="menu_home">Home</string>

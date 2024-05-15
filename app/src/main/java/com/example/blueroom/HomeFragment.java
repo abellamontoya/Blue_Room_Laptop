@@ -17,8 +17,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.Spinner;
@@ -38,6 +38,7 @@ public class HomeFragment extends Fragment implements ProductAdapter.OnProductCl
     private AppViewModel appViewModel;
     private ImageView photoImageView;
     private ProductAdapter adapter;
+    private Spinner spinner;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -48,30 +49,34 @@ public class HomeFragment extends Fragment implements ProductAdapter.OnProductCl
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(view);
-        Spinner spinner2 = view.findViewById(R.id.spinner2);
         CheckBox checkVinyl = view.findViewById(R.id.checkVinyl);
         CheckBox checkCd = view.findViewById(R.id.checkCd);
 
         SearchView searchView = view.findViewById(R.id.searchbar);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                // No necesitamos manejar la acción de enviar aquí
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                // Realizar la búsqueda en Firestore cuando el texto cambie
-                searchFirestore(newText);
-                return true;
-            }
-        });
+        // Your searchView listener code
 
         appViewModel = new ViewModelProvider(requireActivity()).get(AppViewModel.class);
 
         recyclerView = view.findViewById(R.id.recycler);
         recyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 2));
+
+        spinner = view.findViewById(R.id.spinner);
+        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(requireContext(),
+                R.array.sort_options, android.R.layout.simple_spinner_item);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(spinnerAdapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedOption = parent.getItemAtPosition(position).toString();
+                handleSorting(selectedOption);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Do nothing
+            }
+        });
 
         Query query = FirebaseFirestore.getInstance().collection("products").orderBy("name");
 
@@ -79,43 +84,6 @@ public class HomeFragment extends Fragment implements ProductAdapter.OnProductCl
                 .setQuery(query, products.class)
                 .setLifecycleOwner(this)
                 .build();
-
-        Spinner spinner = view.findViewById(R.id.spinner);
-
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Query newQuery;
-                switch (position) {
-                    case 0: // Price Up
-                        newQuery = FirebaseFirestore.getInstance().collection("products").orderBy("price", Query.Direction.ASCENDING);
-                        break;
-                    case 1: // Price Down
-                        newQuery = FirebaseFirestore.getInstance().collection("products").orderBy("price", Query.Direction.DESCENDING);
-                        break;
-                    case 2: // Author
-                        newQuery = FirebaseFirestore.getInstance().collection("products").orderBy("author");
-                        break;
-                    case 3: // Default (by name)
-                    default:
-                        newQuery = FirebaseFirestore.getInstance().collection("products").orderBy("name");
-                        break;
-                }
-
-                FirestoreRecyclerOptions<products> newOptions = new FirestoreRecyclerOptions.Builder<products>()
-                        .setQuery(newQuery, products.class)
-                        .setLifecycleOwner(HomeFragment.this)
-                        .build();
-
-                adapter.updateOptions(newOptions);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // No action needed here
-            }
-        });
-
 
         adapter = new ProductAdapter(options, this);
         recyclerView.setAdapter(adapter);
@@ -132,6 +100,34 @@ public class HomeFragment extends Fragment implements ProductAdapter.OnProductCl
         }
     }
 
+    private void handleSorting(String selectedOption) {
+        Query query = FirebaseFirestore.getInstance().collection("products");
+
+        switch (selectedOption) {
+            case "Price Up":
+                query = query.orderBy("price", Query.Direction.ASCENDING);
+                break;
+            case "Price Down":
+                query = query.orderBy("price", Query.Direction.DESCENDING);
+                break;
+            case "Name":
+                query = query.orderBy("name");
+                break;
+            case "Author":
+                query = query.orderBy("author");
+                break;
+            default:
+                break;
+        }
+
+        FirestoreRecyclerOptions<products> options = new FirestoreRecyclerOptions.Builder<products>()
+                .setQuery(query, products.class)
+                .setLifecycleOwner(this)
+                .build();
+
+        adapter.updateOptions(options);
+    }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -139,13 +135,14 @@ public class HomeFragment extends Fragment implements ProductAdapter.OnProductCl
             adapter.startListening();
         }
     }
+
     private void searchFirestore(String searchText) {
         Query baseQuery = FirebaseFirestore.getInstance().collection("products");
 
         if (searchText != null && !searchText.trim().isEmpty()) {
             String queryText = searchText.trim().toLowerCase();
 
-            // Crear una consulta que busque documentos donde el campo name_lowercase contenga la cadena de búsqueda
+            // Create a query to search documents where the name_lowercase field contains the search string
             baseQuery = baseQuery.whereArrayContains("name_lowercase", queryText);
         }
 
@@ -156,8 +153,6 @@ public class HomeFragment extends Fragment implements ProductAdapter.OnProductCl
 
         adapter.updateOptions(options);
     }
-
-
 
     @Override
     public void onStop() {
@@ -175,12 +170,11 @@ public class HomeFragment extends Fragment implements ProductAdapter.OnProductCl
         bundle.putString("name", product.getName());
         bundle.putInt("date", product.getDate());
         bundle.putFloat("price", product.getPrice());
-        bundle.putString("type", product.getType()); // Obtener el tipo del producto
-        bundle.putStringArrayList("tag", new ArrayList<>(product.getTag())); // Obtener la lista de tags del producto
+        bundle.putString("type", product.getType()); // Get the product type
+        bundle.putStringArrayList("tag", new ArrayList<>(product.getTag())); // Get the product tags list
 
         navController.navigate(R.id.showProduct, bundle);
     }
-
 
     static class ProductViewHolder extends RecyclerView.ViewHolder {
         ImageView imageurl;

@@ -11,12 +11,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class CartFragment extends Fragment {
 
@@ -47,10 +49,34 @@ public class CartFragment extends Fragment {
 
         buyButton = view.findViewById(R.id.buycart);
 
-        updateBuyButtonText(); // Update Buy button text when fragment is created
+        // Inicialmente, actualiza el botón Buy
+        updateBuyButton();
+
+        buyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Calculate total price
+                double totalPrice = calculateTotalPrice();
+
+                // Navigate to BuyFragment and pass the total price as an argument
+                Bundle args = new Bundle();
+                args.putDouble("totalPrice", totalPrice);
+                Navigation.findNavController(v).navigate(R.id.buyFragment, args);
+            }
+        });
 
         return view;
     }
+
+    // Actualiza el texto y clickeabilidad del botón Buy
+    private void updateBuyButton() {
+        double totalPrice = calculateTotalPrice();
+        String buttonText = String.format(Locale.getDefault(), "Buy (%.2f €)", totalPrice);
+        buyButton.setText(buttonText);
+        buyButton.setEnabled(!cartProducts.isEmpty());
+    }
+
+
 
     // Calculate total price of products in the cart
     private double calculateTotalPrice() {

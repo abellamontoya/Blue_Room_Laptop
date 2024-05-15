@@ -53,7 +53,6 @@ public class SignInFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_sign_in, container, false);
     }
 
@@ -119,7 +118,6 @@ public class SignInFragment extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Update isLoggedIn preference
                             sharedPreferences.edit().putBoolean("isLoggedIn", true).apply();
                             actualizarUI(mAuth.getCurrentUser());
                         } else {
@@ -156,7 +154,6 @@ public class SignInFragment extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            Log.e("ABCD", "signInWithCredential:success");
                             actualizarUI(mAuth.getCurrentUser());
                         } else {
                             Log.e("ABCD", "signInWithCredential:failure", task.getException());

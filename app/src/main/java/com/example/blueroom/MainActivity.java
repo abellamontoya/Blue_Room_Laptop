@@ -28,19 +28,18 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // Inicializar SharedPreferences
         sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
 
         NavController navController = ((NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.mobile_navigation)).getNavController();
 
-        // Setup BottomNavigationView with NavController
         NavigationUI.setupWithNavController(binding.bottomNavView, navController);
 
         navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
             @Override
             public void onDestinationChanged(@NonNull NavController controller,
                                              @NonNull NavDestination destination, @Nullable Bundle arguments) {
-                if (destination.getId() == R.id.signInFragment || destination.getId() == R.id.registerFragment || destination.getId() == R.id.searchFragment || destination.getId() == R.id.showProduct) {
+                if (destination.getId() == R.id.signInFragment || destination.getId() == R.id.registerFragment || destination.getId() == R.id.searchFragment
+                        || destination.getId() == R.id.showProduct || destination.getId() == R.id.buyFragment) {
                     binding.bottomNavView.setVisibility(View.GONE);
                 } else {
                     binding.bottomNavView.setVisibility(View.VISIBLE);
@@ -48,16 +47,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Verificar si el usuario ha iniciado sesión
         if (isLoggedIn()) {
-            // Navegar al fragmento de inicio (home)
             navController.navigate(R.id.homeFragment);
         }
     }
 
-    // Método para verificar si el usuario ha iniciado sesión
     private boolean isLoggedIn() {
-        // Verificar si "isLoggedIn" es true en SharedPreferences
         return sharedPreferences.getBoolean("isLoggedIn", false);
     }
 }

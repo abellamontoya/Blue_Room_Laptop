@@ -55,12 +55,7 @@
             android:background="@color/less_clear_blue">
             <Spinner
                 android:id="@+id/spinner"
-                android:layout_width="125dp"
-                android:layout_height="wrap_content"
-                android:entries="@array/sort_options"/>
-            <Spinner
-                android:id="@+id/spinner2"
-                android:layout_width="125dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:entries="@array/sort_options"/>
             <CheckBox
