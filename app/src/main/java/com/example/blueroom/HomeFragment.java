@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.Spinner;
@@ -66,6 +67,14 @@ public class HomeFragment extends Fragment implements ProductAdapter.OnProductCl
                 return true;
             }
         });
+        ImageButton favoriteButton = view.findViewById(R.id.favourite_button);
+        favoriteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navController.navigate(R.id.favouritesFragment); // Navegar al fragmento de favoritos
+            }
+        });
+
 
         appViewModel = new ViewModelProvider(requireActivity()).get(AppViewModel.class);
 

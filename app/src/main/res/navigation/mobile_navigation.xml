@@ -55,4 +55,9 @@
         android:name="com.example.blueroom.BuyFragment"
         android:label="fragment_buy"
         tools:layout="@layout/fragment_buy" />
+    <fragment
+        android:id="@+id/favouritesFragment"
+        android:name="com.example.blueroom.FavouritesFragment"
+        android:label="fragment_favourites"
+        tools:layout="@layout/fragment_favourites" />
 </navigation>
