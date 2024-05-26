@@ -11,7 +11,8 @@ public class products implements Serializable {
     public float price;
     public int date;
     public String type;
-    public List<String> tag;  // Cambia este campo a List<String>
+    public List<String> tag;
+    private String musicurl;// Cambia este campo a List<String>
 
     public products() {}
 
@@ -35,6 +36,14 @@ public class products implements Serializable {
     }
 
     public products(String author, String imageUrl, String name, double price) {
+    }
+
+    public String getMusicurl() {
+        return musicurl;
+    }
+
+    public void setMusicurl(String musicurl) {
+        this.musicurl = musicurl;
     }
 
     public void setAuthor(String author) {
